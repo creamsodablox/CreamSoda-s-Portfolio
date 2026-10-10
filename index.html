@@ -3,18 +3,870 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PageClone - CreamSoda Designs</title>
-    <meta name="description" content="Effortlessly recreate existing web pages with pixel-perfect precision and exact structural matching." />
-    <meta property="og:title" content="PageClone - CreamSoda Designs" />
-    <meta property="og:description" content="Effortlessly recreate existing web pages with pixel-perfect precision and exact structural matching." />
+    <title>CreamSoda Designs</title>
+    <meta name="description" content="Designs that make you stand out. Professional Roblox graphics and creative design." />
+    <meta property="og:title" content="CreamSoda Designs" />
+    <meta property="og:description" content="Designs that make you stand out. Professional Roblox graphics and creative design." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <style>
+      /* Reset & Global Base */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        width: 100%;
+        min-height: 100%;
+        background-color: #38584b;
+        color: #ffffff;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+
+      body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 100vh;
+        user-select: none;
+        cursor: default;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font-family: inherit;
+      }
+
+      /* Animated Mesh Background (pointer-events isolated) */
+      .mesh-bg-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        user-select: none;
+        touch-action: none;
+        overflow: hidden;
+        background-color: #38584b;
+        z-index: 0;
+      }
+
+      .mesh-canvas {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        animation: canvas-fast-flow 24s ease-in-out infinite;
+        filter: blur(95px);
+        -webkit-filter: blur(95px);
+        opacity: 0.95;
+        will-change: transform;
+        pointer-events: none;
+      }
+
+      .mesh-blob {
+        position: absolute;
+        border-radius: 9999px;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .blob-1 {
+        top: -14%;
+        left: -12%;
+        width: 66%;
+        height: 66%;
+        background: radial-gradient(circle, #4ade80 0%, transparent 75%);
+        animation: roam-blob-1 22s ease-in-out infinite;
+      }
+
+      .blob-2 {
+        top: 0%;
+        left: 22%;
+        width: 60%;
+        height: 62%;
+        background: radial-gradient(circle, #bef264 0%, transparent 72%);
+        animation: roam-blob-2 25s ease-in-out infinite;
+      }
+
+      .blob-3 {
+        top: -16%;
+        right: -10%;
+        width: 64%;
+        height: 66%;
+        background: radial-gradient(circle, #2696a4 0%, transparent 72%);
+        animation: roam-blob-3 21s ease-in-out infinite;
+      }
+
+      .blob-4 {
+        top: 32%;
+        left: -14%;
+        width: 62%;
+        height: 58%;
+        background: radial-gradient(circle, #6ee7b7 0%, transparent 75%);
+        animation: roam-blob-4 26s ease-in-out infinite;
+      }
+
+      .blob-5 {
+        top: 30%;
+        left: 26%;
+        width: 58%;
+        height: 58%;
+        background: radial-gradient(circle, #2dd4bf 0%, transparent 75%);
+        animation: roam-blob-5 23s ease-in-out infinite;
+      }
+
+      .blob-6 {
+        top: 34%;
+        right: -6%;
+        width: 62%;
+        height: 62%;
+        background: radial-gradient(circle, #a3e635 0%, transparent 72%);
+        animation: roam-blob-6 22s ease-in-out infinite;
+      }
+
+      .blob-7 {
+        bottom: -16%;
+        left: -10%;
+        width: 66%;
+        height: 62%;
+        background: radial-gradient(circle, #588157 0%, transparent 75%);
+        animation: roam-blob-7 27s ease-in-out infinite;
+      }
+
+      .blob-8 {
+        bottom: -14%;
+        left: 24%;
+        width: 60%;
+        height: 60%;
+        background: radial-gradient(circle, #22c55e 0%, transparent 75%);
+        animation: roam-blob-8 24s ease-in-out infinite;
+      }
+
+      .blob-9 {
+        bottom: -18%;
+        right: -12%;
+        width: 64%;
+        height: 62%;
+        background: radial-gradient(circle, #4f7762 0%, transparent 75%);
+        animation: roam-blob-9 25s ease-in-out infinite;
+      }
+
+      .mesh-overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+      }
+
+      /* Atmospheric Roaming Keyframes */
+      @keyframes roam-blob-1 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        15% { transform: translate3d(45vw, 15vh, 0) scale(1.15); }
+        30% { transform: translate3d(62vw, 52vh, 0) scale(0.95); }
+        50% { transform: translate3d(20vw, 62vh, 0) scale(1.1); }
+        70% { transform: translate3d(-10vw, 32vh, 0) scale(0.92); }
+        85% { transform: translate3d(25vw, 5vh, 0) scale(1.05); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-2 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        18% { transform: translate3d(-35vw, 25vh, 0) scale(1.1); }
+        35% { transform: translate3d(-15vw, 55vh, 0) scale(0.95); }
+        55% { transform: translate3d(35vw, 42vh, 0) scale(1.14); }
+        75% { transform: translate3d(38vw, -12vh, 0) scale(0.92); }
+        90% { transform: translate3d(10vw, 15vh, 0) scale(1.05); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-3 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        16% { transform: translate3d(-50vw, 20vh, 0) scale(1.12); }
+        34% { transform: translate3d(-38vw, 58vh, 0) scale(0.94); }
+        52% { transform: translate3d(-10vw, 38vh, 0) scale(1.1); }
+        72% { transform: translate3d(15vw, 52vh, 0) scale(0.96); }
+        88% { transform: translate3d(-20vw, -5vh, 0) scale(1.04); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-4 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        18% { transform: translate3d(52vw, -22vh, 0) scale(1.08); }
+        36% { transform: translate3d(65vw, 22vh, 0) scale(0.95); }
+        54% { transform: translate3d(28vw, 42vh, 0) scale(1.14); }
+        74% { transform: translate3d(5vw, -12vh, 0) scale(0.92); }
+        88% { transform: translate3d(-10vw, 15vh, 0) scale(1.05); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-5 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        20% { transform: translate3d(-32vw, -28vh, 0) scale(1.15); }
+        40% { transform: translate3d(36vw, -22vh, 0) scale(0.92); }
+        60% { transform: translate3d(-28vw, 32vh, 0) scale(1.1); }
+        80% { transform: translate3d(32vw, 28vh, 0) scale(0.95); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-6 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        15% { transform: translate3d(-52vw, -18vh, 0) scale(1.12); }
+        35% { transform: translate3d(-42vw, 32vh, 0) scale(0.94); }
+        55% { transform: translate3d(-10vw, -22vh, 0) scale(1.1); }
+        75% { transform: translate3d(15vw, 38vh, 0) scale(0.96); }
+        90% { transform: translate3d(-18vw, 10vh, 0) scale(1.05); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-7 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        20% { transform: translate3d(55vw, -50vh, 0) scale(1.1); }
+        40% { transform: translate3d(22vw, -55vh, 0) scale(0.93); }
+        60% { transform: translate3d(58vw, 10vh, 0) scale(1.14); }
+        80% { transform: translate3d(15vw, -22vh, 0) scale(0.95); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-8 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        17% { transform: translate3d(-32vw, -45vh, 0) scale(1.12); }
+        38% { transform: translate3d(32vw, -40vh, 0) scale(0.95); }
+        58% { transform: translate3d(-22vw, 12vh, 0) scale(1.14); }
+        78% { transform: translate3d(36vw, 10vh, 0) scale(0.92); }
+        90% { transform: translate3d(5vw, -18vh, 0) scale(1.04); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes roam-blob-9 {
+        0% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+        18% { transform: translate3d(-55vw, -55vh, 0) scale(1.14); }
+        36% { transform: translate3d(-10vw, -58vh, 0) scale(0.94); }
+        56% { transform: translate3d(-58vw, 10vh, 0) scale(1.1); }
+        76% { transform: translate3d(-22vw, -22vh, 0) scale(0.96); }
+        88% { transform: translate3d(10vw, -36vh, 0) scale(1.06); }
+        100% { transform: translate3d(0vw, 0vh, 0) scale(1); }
+      }
+
+      @keyframes canvas-fast-flow {
+        0% { transform: scale(1.3) rotate(0deg); }
+        33% { transform: scale(1.35) rotate(2.5deg); }
+        66% { transform: scale(1.28) rotate(-2deg); }
+        100% { transform: scale(1.3) rotate(0deg); }
+      }
+
+      /* Top Floating Pill Navigation Bar */
+      .top-navbar {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 50;
+        width: 92%;
+        max-width: 896px;
+        pointer-events: auto;
+      }
+
+      .navbar-capsule {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 24px;
+        border-radius: 9999px;
+        background-color: rgba(10, 17, 13, 0.75);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+        transition: all 0.2s ease;
+      }
+
+      .logo-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 9999px;
+        outline: none;
+      }
+
+      .logo-link:focus-visible {
+        outline: 2px solid #4ade80;
+        outline-offset: 2px;
+      }
+
+      .logo-img {
+        height: 36px;
+        width: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .nav-links {
+        display: none;
+        align-items: center;
+        gap: 36px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #d1d5db;
+      }
+
+      @media (min-width: 768px) {
+        .nav-links {
+          display: flex;
+        }
+      }
+
+      .nav-link {
+        color: #d1d5db;
+        transition: color 0.15s ease;
+      }
+
+      .nav-link:hover {
+        color: #ffffff;
+      }
+
+      .nav-link.active {
+        color: #ffffff;
+      }
+
+      .nav-link.active:hover {
+        color: #4ade80;
+      }
+
+      .contact-btn {
+        padding: 9px 20px;
+        border-radius: 9999px;
+        background: linear-gradient(to right, #22c55e, #16a34a);
+        color: #041e11;
+        font-weight: 700;
+        font-size: 13.5px;
+        letter-spacing: -0.01em;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(34, 197, 94, 0.35);
+        transition: all 0.15s ease;
+        outline: none;
+      }
+
+      .contact-btn:hover {
+        background: linear-gradient(to right, #4ade80, #22c55e);
+      }
+
+      .contact-btn:active {
+        transform: scale(0.96);
+      }
+
+      .contact-btn:focus-visible {
+        outline: 2px solid #4ade80;
+        outline-offset: 2px;
+      }
+
+      /* Hero Content */
+      .hero-section {
+        position: relative;
+        z-index: 10;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 32px;
+        max-width: 896px;
+        margin: 0 auto;
+      }
+
+      .hero-title {
+        font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.16;
+        color: #ffffff;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .hero-title span {
+        display: block;
+      }
+
+      .hero-title .line-2 {
+        margin-top: 6px;
+      }
+
+      /* Bottom YouTube Creator Channels Dock */
+      .channels-dock {
+        position: relative;
+        z-index: 20;
+        width: 100%;
+        margin-top: auto;
+      }
+
+      .dock-bar {
+        position: relative;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: rgba(6, 12, 8, 0.85);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        padding: 18px 0 20px;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
+      }
+
+      .dock-sheen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+        pointer-events: none;
+      }
+
+      /* Dual-Layer Fade Scrims */
+      .dock-fade-left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 88px;
+        background: linear-gradient(to right, #060c08, rgba(6, 12, 8, 0.8), transparent);
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .dock-fade-right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 88px;
+        background: linear-gradient(to left, #060c08, rgba(6, 12, 8, 0.8), transparent);
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      /* Marquee Track */
+      .marquee-wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.4) 3%,
+          black 7%,
+          black 93%,
+          rgba(0, 0, 0, 0.4) 97%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.4) 3%,
+          black 7%,
+          black 93%,
+          rgba(0, 0, 0, 0.4) 97%,
+          transparent 100%
+        );
+      }
+
+      .marquee-track {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 4px 0;
+        width: max-content;
+        animation: marquee-scroll 40s linear infinite;
+        will-change: transform;
+      }
+
+      @keyframes marquee-scroll {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        100% {
+          transform: translate3d(-50%, 0, 0);
+        }
+      }
+
+      /* Creator Capsule Card */
+      .creator-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 16px;
+        border-radius: 9999px;
+        background-color: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out;
+        flex-shrink: 0;
+        cursor: pointer;
+        user-select: none;
+        z-index: 0;
+        text-decoration: none;
+        color: inherit;
+        outline: none;
+      }
+
+      .creator-card:hover {
+        transform: scale(1.05) translateY(-2px);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: #4ade80;
+        z-index: 20;
+      }
+
+      .creator-card:active {
+        transform: scale(0.96);
+      }
+
+      .creator-card:focus-visible {
+        outline: 2px solid #4ade80;
+        outline-offset: 2px;
+      }
+
+      .creator-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 9999px;
+        object-fit: cover;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        flex-shrink: 0;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.4);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .creator-card:hover .creator-avatar {
+        transform: scale(1.05);
+        border-color: #4ade80;
+      }
+
+      .creator-details {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        padding-right: 6px;
+      }
+
+      .creator-name-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .creator-name {
+        font-weight: 700;
+        font-size: 13.5px;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        transition: color 0.15s ease;
+      }
+
+      .creator-card:hover .creator-name {
+        color: #4ade80;
+      }
+
+      /* YouTube Verified Checkmark Badge */
+      .verified-badge {
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        color: #9ca3af;
+        flex-shrink: 0;
+        vertical-align: middle;
+      }
+
+      .creator-card:hover .verified-badge {
+        color: #cbd5e1;
+      }
+
+      .creator-subs {
+        font-weight: 600;
+        font-size: 11.5px;
+        color: #4ade80;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        margin-top: 2px;
+        transition: color 0.15s ease;
+      }
+
+      .creator-card:hover .creator-subs {
+        color: #86efac;
+      }
+
+      /* Accessibility Reduced Motion */
+      @media (prefers-reduced-motion: reduce) {
+        .mesh-canvas,
+        .mesh-blob,
+        .marquee-track {
+          animation: none !important;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Top Floating Pill Navigation Bar -->
+    <header class="top-navbar">
+      <nav class="navbar-capsule" aria-label="Main Navigation">
+        <!-- Logo on Left -->
+        <a href="#" class="logo-link" aria-label="CreamSoda Home">
+          <img
+            src="creamsoda-logo.png"
+            onerror="this.onerror=null; this.src='https://media.discordapp.net/attachments/1555571636739117098/1557804684184522812/creamsoda_logo_with_shadow_png.png?ex=6ac9222b&is=6ac7d0ab&hm=1e39f011434dd5d17f7a293a756218a062d63cf840d9def77993bc1663011602&=&format=webp&quality=lossless';"
+            alt="CreamSoda Logo"
+            class="logo-img"
+          />
+        </a>
+
+        <!-- Center Navigation Links -->
+        <div class="nav-links">
+          <a href="#home" class="nav-link active">Home</a>
+          <a href="#portfolio" class="nav-link">Portfolio</a>
+          <a href="#reviews" class="nav-link">Reviews</a>
+          <a href="#about" class="nav-link">About</a>
+        </div>
+
+        <!-- Right Action Button -->
+        <button type="button" class="contact-btn">
+          Get in Contact
+        </button>
+      </nav>
+    </header>
+
+    <!-- Smoothly Animated Atmospheric Mesh Background -->
+    <div class="mesh-bg-container" aria-hidden="true">
+      <div class="mesh-canvas">
+        <div class="mesh-blob blob-1"></div>
+        <div class="mesh-blob blob-2"></div>
+        <div class="mesh-blob blob-3"></div>
+        <div class="mesh-blob blob-4"></div>
+        <div class="mesh-blob blob-5"></div>
+        <div class="mesh-blob blob-6"></div>
+        <div class="mesh-blob blob-7"></div>
+        <div class="mesh-blob blob-8"></div>
+        <div class="mesh-blob blob-9"></div>
+      </div>
+      <div class="mesh-overlay"></div>
+    </div>
+
+    <!-- Centered Hero Content -->
+    <main class="hero-section" id="home">
+      <h1 class="hero-title">
+        <span>Designs that make you</span>
+        <span class="line-2">stand out.</span>
+      </h1>
+    </main>
+
+    <!-- Bottom YouTube Creator Channels Dock -->
+    <aside class="channels-dock" aria-label="Client YouTube Channels">
+      <div class="dock-bar">
+        <!-- Top Divider Sheen -->
+        <div class="dock-sheen"></div>
+
+        <!-- Left & Right Fade Feather Scrims -->
+        <div class="dock-fade-left"></div>
+        <div class="dock-fade-right"></div>
+
+        <!-- Marquee Track with Mask Fade -->
+        <div class="marquee-wrapper">
+          <div class="marquee-track" id="marquee-track">
+            <!-- Channel pills rendered via vanilla JavaScript below -->
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Vanilla JavaScript for Marquee Content & Verified Badges -->
+    <script>
+      (function () {
+        // Verified creators dataset
+        var creators = [
+          {
+            id: 'chy',
+            name: 'Chy',
+            subs: '163K Subs',
+            verified: true,
+            avatar: 'creators/chy.jpg',
+            fallback: 'https://yt3.googleusercontent.com/DQp_9vyifu3D-k3rPEzNbMw0r_buEP4YR9TY7ja3dhpL65t2fqHDlrD726b0XkUcvlyjS8lI=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@chyboy'
+          },
+          {
+            id: 'kitt-gaming',
+            name: 'Kitt Gaming',
+            subs: '5.84M Subs',
+            verified: true,
+            avatar: 'creators/kitt-gaming.jpg',
+            fallback: 'https://yt3.googleusercontent.com/pUgRMNXv6AcVHkNvH7txNleWQbGa8XT1lqkDtxxMP7G8QiTDHkyepi2qonUkAS9SnrpwEXH8=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@real.kittgaming'
+          },
+          {
+            id: 'xdemon',
+            name: 'xDemon',
+            subs: '3.16M Subs',
+            verified: true,
+            avatar: 'creators/xdemon.jpg',
+            fallback: 'https://yt3.googleusercontent.com/bMpBhb71cGG39NOTGwGKVT4Ia2yhXvX-oiXs8gPuA0N6v0aUud6ItTLfmxxYLcffbxt0LC7j7g=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@xDemonRBLX'
+          },
+          {
+            id: 'oceanytides',
+            name: 'OceanyTides',
+            subs: '58K Subs',
+            verified: false,
+            avatar: 'creators/oceanytides.jpg',
+            fallback: 'https://yt3.googleusercontent.com/BbX1DfUp5PXdb6LfUpt9fBPIo1t0vKtAFqmp_BHbRqPFXlQLo4gSeyiz3ojAGRYgz6uupyTYRQ=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@OceanyTides'
+          },
+          {
+            id: 'monqler',
+            name: 'Monqler',
+            subs: '33.3K Subs',
+            verified: false,
+            avatar: 'creators/monqler.jpg',
+            fallback: 'https://yt3.googleusercontent.com/Qs6ld1088E506WfepNcloXqxUqFjO64DpTs-VQaQ8rFB8aJG-7DcdcE_jXFIExx4kPusB7bASw=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@Monqler'
+          },
+          {
+            id: 'aesir',
+            name: 'Aesir',
+            subs: '286K Subs',
+            verified: true,
+            avatar: 'creators/aesir.jpg',
+            fallback: 'https://yt3.googleusercontent.com/Xtk6bbLARDnbgfMv5d45NOIiBvG_SqZxHHaOehbG7onCka40Y1j2wnrLNLkWNYR-mANbHKqEGIw=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@AesirBlox/videos'
+          },
+          {
+            id: 'nateflameplayz',
+            name: 'NateFlamePlayz',
+            subs: '21.4K Subs',
+            verified: false,
+            avatar: 'creators/nateflameplayz.jpg',
+            fallback: 'https://yt3.googleusercontent.com/zsgUncGJu3LZe6lk_HWvv1QsT3FYvVSHD0Zf7ZbImQ8dYudj6cNnMs9zkH1lQJ3UvfImK8y29g=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@NateFlamePlayz'
+          },
+          {
+            id: 'dvalin',
+            name: 'Dvalin',
+            subs: '6.1K Subs',
+            verified: false,
+            avatar: 'creators/dvalin.jpg',
+            fallback: 'https://yt3.googleusercontent.com/76sad8KzYV5RQfaUnPdM_OwmyzlxF8pO2op3-hSIuXVHIQQiTTKOrznyb5apKWaPRs4MNoGx=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@DesiredDvalin'
+          },
+          {
+            id: 'frostyy',
+            name: 'Frostyy',
+            subs: '5.43K Subs',
+            verified: false,
+            avatar: 'creators/frostyy.jpg',
+            fallback: 'https://yt3.googleusercontent.com/l-bkDZxJ1CwxbY6_8rqXoRPDvSLNQjVT8p8W6Dixgf6_xRproaHwxEaq5YuUUKNahSrWfIpA=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@FrostyyVids'
+          },
+          {
+            id: 'wintle',
+            name: 'Wintle',
+            subs: '408 Subs',
+            verified: false,
+            avatar: 'creators/wintle.jpg',
+            fallback: 'https://yt3.googleusercontent.com/gznh7wuhzKyMa5rbCFF4DJQmso8d30aSmuKpyucs6zsr6_xeRpj-jmMVt6OYzF0wy_eVtlq4=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@WintleBlox'
+          },
+          {
+            id: '1x1cat',
+            name: '1x1cat',
+            subs: '8.21K Subs',
+            verified: false,
+            avatar: 'creators/1x1cat.jpg',
+            fallback: 'https://yt3.googleusercontent.com/QUuOvLaqTru_-tHN0okGRUVR12wqwnxM5k-fUQie2c2w4QqCLZmJafwQZfld-CrQsi9T9FnyLQ=s900-c-k-c0x00ffffff-no-rj',
+            url: 'https://www.youtube.com/@1x1catt'
+          }
+        ];
+
+        // YouTube verified badge SVG string
+        var verifiedBadgeSvg = '<svg class="verified-badge" viewBox="0 0 24 24" fill="currentColor" aria-label="Verified" title="Verified"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+
+        // Duplicate the creator list for continuous infinite loop
+        var fullList = creators.concat(creators);
+        var track = document.getElementById('marquee-track');
+
+        fullList.forEach(function (c) {
+          var a = document.createElement('a');
+          a.className = 'creator-card';
+          a.href = c.url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.title = 'Visit ' + c.name + ' on YouTube';
+
+          // Safe navigation handler
+          a.addEventListener('click', function (e) {
+            if (!e.defaultPrevented) {
+              window.open(c.url, '_blank', 'noopener,noreferrer');
+              e.preventDefault();
+            }
+          });
+
+          var img = document.createElement('img');
+          img.className = 'creator-avatar';
+          img.src = c.avatar;
+          img.alt = c.name;
+          img.loading = 'lazy';
+          img.onerror = function () {
+            if (this.src !== c.fallback) {
+              this.src = c.fallback;
+            }
+          };
+
+          var details = document.createElement('div');
+          details.className = 'creator-details';
+
+          var nameRow = document.createElement('div');
+          nameRow.className = 'creator-name-row';
+
+          var nameSpan = document.createElement('span');
+          nameSpan.className = 'creator-name';
+          nameSpan.textContent = c.name;
+          nameRow.appendChild(nameSpan);
+
+          // Add verified badge if channel has > 100K subscribers
+          if (c.verified) {
+            var badgeWrapper = document.createElement('span');
+            badgeWrapper.innerHTML = verifiedBadgeSvg;
+            nameRow.appendChild(badgeWrapper.firstChild);
+          }
+
+          var subsSpan = document.createElement('span');
+          subsSpan.className = 'creator-subs';
+          subsSpan.textContent = c.subs;
+
+          details.appendChild(nameRow);
+          details.appendChild(subsSpan);
+
+          a.appendChild(img);
+          a.appendChild(details);
+          track.appendChild(a);
+        });
+      })();
+    </script>
   </body>
 </html>
